@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - 5000:5000
+  backend:
+    container_name: backend
+    build: ./backend
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+    ports:
+      - 8080:8080
+  redis:
+    container_name: redis
+    image: arm64v8/redis:6.0
+    restart: always
+

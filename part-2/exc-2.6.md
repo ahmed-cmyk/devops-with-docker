@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+    backend: 
+        container_name: backend
+        build: ./backend
+        environment:
+            REDIS_HOST: redis
+            POSTGRES_HOST: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DATABASE: postgres
+        depends_on:
+            - redis
+            - postgres
+        ports: 
+            - 8080:8080
+    frontend:
+        container_name: frontend
+        build: ./frontend
+        depends_on:
+            - backend
+        ports:
+            - 5000:5000
+    redis:
+        container_name: redis
+        image: arm64v8/redis
+        restart: always
+    postgres:
+        container_name: postgres
+        image: arm64v8/postgres
+        environment:
+            # POSTGRES_PASSWORD is the only one required for database initialisation
+            POSTGRES_HOST: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DATABASE: postgres

@@ -1,0 +1,24 @@
+version: '3.2'
+services:
+  calculator:
+      image: devopsdockeruh/scaling-exercise-calculator
+      ports:
+        - 3000:3000
+      container_name: calculator
+  compute:
+      image: devopsdockeruh/scaling-exercise-compute
+      environment:
+        - VIRTUAL_HOST=compute.localtest.me
+  load-balancer:
+      build: ./load-balancer
+      image: load-balancer
+      volumes: 
+        - /var/run/docker.sock:/tmp/docker.sock:ro
+      ports:
+        - 80:80
+      container_name: load-balancer
+  db:
+    container_name: postgres
+    image: postgres:13.11
+    environment:
+      - POSTGRES_PASSWORD=password
