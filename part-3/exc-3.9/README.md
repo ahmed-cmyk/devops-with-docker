@@ -1,0 +1,29 @@
+# Exercise 3.9
+
+## Dockerfile
+
+```
+FROM golang:1.20.4 as build-stage
+WORKDIR /app
+
+ENV LC_ALL=C.UTF-8
+
+COPY . .
+
+RUN go build -o goapp
+
+FROM scratch
+
+COPY --from=build-stage /app/goapp /goapp
+COPY --from=build-stage /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+CMD ./server
+```
+
+---
+
+## Size
+
+822MB -> 17.96MB
+
+---
